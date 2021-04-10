@@ -16,21 +16,21 @@ enum MagneticType: Int {
 //MARK: 磁片状态
 enum MagneticState: Int {
     ///默认状态
-    case MagneticStateNormal = 0
+    case MagneticStateNormal            = 0
     ///加载状态
-    case MagneticStateLoading = 1
+    case MagneticStateLoading           = 1
     ///错误状态
-    case MagneticStateError = 2
+    case MagneticStateError             = 2
 }
 
 //MARK: 磁片错误类型
 enum MagneticErrorCode: Int {
     ///无错误
-    case MagneticErrorCodeNone = 0
+    case MagneticErrorCodeNone          = 0
     ///网络错误
-    case MagneticErrorCodeNetwork = -5500
+    case MagneticErrorCodeNetwork       = -5500
     ///数据错误
-    case MagneticErrorCodeFailed = -5501
+    case MagneticErrorCodeFailed        = -5501
 }
 
 class MagneticHeaderContext: NSObject {

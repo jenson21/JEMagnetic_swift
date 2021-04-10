@@ -12,38 +12,81 @@ import UIKit
 struct MagneticsRefreshType: OptionSet{
     let rawValue: Int
     ///无刷新方式
-    static let MagneticsRefreshTypeNone = 0
+    static let MagneticsRefreshTypeNone                 = 0
     ///下拉刷新
-    static let MagneticsRefreshTypePullToRefresh = MagneticsRefreshType(rawValue: 1 << 0)
+    static let MagneticsRefreshTypePullToRefresh        = MagneticsRefreshType(rawValue: 1 << 0)
     ///上拉加载更多
-    static let MagneticsRefreshTypeInfiniteScrolling = MagneticsRefreshType(rawValue: 1 << 1)
+    static let MagneticsRefreshTypeInfiniteScrolling    = MagneticsRefreshType(rawValue: 1 << 1)
     ///中心加载视图
-    static let MagneticsRefreshTypeLoadingView = MagneticsRefreshType(rawValue: 1 << 2)
+    static let MagneticsRefreshTypeLoadingView          = MagneticsRefreshType(rawValue: 1 << 2)
 }
 ///磁片数据清除方式
 enum MagneticsClearType: Int {
     ///请求前清除
-    case MagneticsClearTypeBeforeRequest = 0
+    case MagneticsClearTypeBeforeRequest                = 0
     ///请求后清除
-    case MagneticsClearTypeAfterRequest = 1
+    case MagneticsClearTypeAfterRequest                 = 1
             
 }
 
-
 class MagneticsController: UIViewController {
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+        tableView.delegate = nil
+        tableView.dataSource = nil
+        tableView.refreshControl?.endRefreshing()
+    }
+    
     //MARK: 声明，构造
+    
+    /*-------------------let value---------------------*/
+    /**
+     初始化全局常量
+     */
+    //磁片封底视图标记
+    private let kTagTableBottomView = 3527
+    //磁片父控制器将显示通知
+    fileprivate let kMagneticsSuperViewWillAppearNotification = "MagneticsSuperViewWillAppearNotification"
+    //磁片父控制器已消失通知
+    fileprivate let kMagneticsSuperViewDidDisappearNotification = "MagneticsSuperViewDidDisappearNotification"
+    
+    /*-------------------view data---------------------*/
+    /**
+     声明列表视图和数据及初始化
+     */
     ///父视图控制器。内部监控页面显示隐藏，应使用业务子类。
     weak var superViewController: UIViewController?
     ///磁片表视图
-    private var tableView: MagneticTableView?
+    private lazy var tableView: MagneticTableView = {
+        var frame = self.view.bounds
+        frame.size.width = min(UIScreen.main.bounds.size.width, UIScreen.main.bounds.size.height)
+        let tableView = MagneticTableView(frame: frame, style: .plain)
+        tableView.dataSource = self;
+        tableView.delegate = self;
+        tableView.autoresizingMask = .flexibleHeight;
+        tableView.magneticControllersArray = magneticControllersArray as? NSMutableArray;
+        tableView.magneticsController = self;
+        if #available(iOS 11, *) {
+            tableView.contentInsetAdjustmentBehavior = .never;
+            tableView.estimatedRowHeight = 0;
+            tableView.estimatedSectionHeaderHeight = 0;
+            tableView.estimatedSectionFooterHeight = 0;
+        } else {
+            self.automaticallyAdjustsScrollViewInsets = false;
+        }
+        return tableView
+    }()
+    private var loadingView: JEBaseLoadingView?
     ///磁片数据源
-    private var magneticsArray: NSMutableArray? //todo <MagneticContext>
+    private var magneticsArray = [MagneticContext]()
     ///磁片控制器数据源
-    private var magneticControllersArray: NSMutableArray? //todo <MagneticController
+    private var magneticControllersArray = [MagneticController]()
     
     /*-------------------Request---------------------*/
-    //Request:
+    /**
+     磁片加载方式
+     */
     ///磁片列表刷新方式
     var refreshType: MagneticsRefreshType?
     ///磁片数据清除方式
@@ -54,16 +97,25 @@ class MagneticsController: UIViewController {
     var currentMagneticsLoadFinish = false
     
     /*-------------------Bottom---------------------*/
-    //MARK: Bottom
+    /**
+     磁片底部
+     */
     ///显示表视图封底。默认为false。若取值为true且刷新方式不支持MagneticsRefreshTypeInfiniteScrolling，tableFooterView自动显示封底视图。
     var enableTableBottomView = false
     ///封底自定义视图。默认为nil，提示“没有更多了”+LOGO。
     var tableBottomCustomView: UIView?
     /// refresh
-    var refreshControl: UIRefreshControl?
-        
-    //MARK: 初始化 init
+    lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.tintColor = .gray
+        refreshControl.attributedTitle = NSAttributedString(string: "下拉刷新")
+        refreshControl.addTarget(self, action: #selector(triggerRefreshAction), for: .valueChanged)
+        return refreshControl
+    }()
     
+    @objc func triggerRefreshAction() {
+    }
+    //MARK: 初始化 init
 }
 
 //MARK: func
@@ -77,6 +129,7 @@ extension MagneticController{
     func scrollToMagneticType(type: MagneticType, animated animate: Bool) {
         
     }
+
 }
 
 //MARK: Request
@@ -108,8 +161,7 @@ extension MagneticController{
     ///磁片列表请求失败
     func requestMagneticDataDidFailWithMagneticContext(magneticContext: MagneticContext, error: NSError) {
     }
-    func triggerRefreshAction() {
-    }
+    
 }
 
 //MARK: Bottom
@@ -127,6 +179,34 @@ extension MagneticsController{
 //MARK: 生命周期
 extension MagneticsController{
     
+    override func loadView() {
+        super.loadView()
+        self.view.addSubview(tableView)
+        self.view.clipsToBounds = true
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        //下拉刷新
+        if (refreshType == .MagneticsRefreshTypePullToRefresh) {
+            tableView.refreshControl = refreshControl;
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if (superViewController == nil) {
+//            [self receiveMagneticsSuperViewWillAppearNotification:nil];
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if (superViewController == nil) {
+//            [self receiveMagneticsSuperViewDidDisappearNotification:nil];
+        }
+    }
 }
 
 //MARK: 网络请求

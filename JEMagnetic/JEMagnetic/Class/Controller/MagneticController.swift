@@ -24,26 +24,26 @@ class MagneticController: NSObject {
     ///磁片列表控制器
     var magneticsController: MagneticsController?
     ///是否为扩展
-    var isExtension: Bool = false
+    var isExtension: Bool       = false
     ///折叠状态。默认为false。
-    var isFold: Bool = false
+    var isFold: Bool            = false
     ///是否完成准备，可渲染
-    var isPrepared: Bool = false
+    var isPrepared: Bool        = false
     
     /*-------------------Cache---------------------*/
     //MARK: 缓存声明，用于优化表视图性能
     ///是否显示错误视图
-    var showMagneticError = false
+    var showMagneticError       = false
     ///是否显示头部视图
-    var showMagneticHeader = false
+    var showMagneticHeader      = false
     ///是否显示尾部视图
-    var showMagneticFooter = false
+    var showMagneticFooter      = false
     ///是否显示磁片间距
-    var showMagneticSpacing = false
+    var showMagneticSpacing     = false
     ///行数缓存
-    var rowCountCache = false
+    var rowCountCache           = false
     ///扩展行数起始index
-    var extensionRowIndex = false
+    var extensionRowIndex       = false
     ///行高缓存
     var rowHeightsCache: Array<Any>?
   
