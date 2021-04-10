@@ -2,7 +2,7 @@
 //  SceneDelegate.swift
 //  JEMagnetic
 //
-//  Created by Jian Dong on 2021/4/10.
+//  Created by Jenson on 2021/4/10.
 //  Copyright © 2021 Jenson. All rights reserved.
 //
 
