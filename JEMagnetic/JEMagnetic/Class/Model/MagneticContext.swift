@@ -8,11 +8,6 @@
 
 import Foundation
 
-//MARK: 磁片类型
-enum MagneticType: Int {
-    case typeclass = 0
-}
-
 //MARK: 磁片状态
 enum MagneticState: Int {
     ///默认状态
@@ -126,11 +121,18 @@ class MagneticContext: NSObject {
     
 }
 
+
+//MARK: 磁片配置⬇︎
+/// 磁片类型
+enum MagneticType: Int {
+    case typeclass = 0
+}
+
 //MARK: func
 extension MagneticContext{
    
     /*-------------------Parse---------------------*/
-    func parseClassName(type: MagneticType) -> String? {
+    func parseClassName(type: MagneticType?) -> String? {
         var className: String? = nil
         switch type {
         case .typeclass:
