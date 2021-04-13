@@ -19,7 +19,7 @@ class MagneticController: NSObject {
     /// 扩展控制器
     var extensionController: MagneticController?
     ///磁片数据源
-    var magneticContext: MagneticContext?
+    var magneticContext: MagneticContext = MagneticContext()
     weak var delegate: MagneticControllerProtocol?
     ///磁片列表控制器
     var magneticsController: MagneticsController?
@@ -41,9 +41,9 @@ class MagneticController: NSObject {
     ///是否显示磁片间距
     var showMagneticSpacing     = false
     ///行数缓存
-    var rowCountCache           = false
+    var rowCountCache           = 0
     ///扩展行数起始index
-    var extensionRowIndex       = false
+    var extensionRowIndex       = 0
     ///行高缓存
     var rowHeightsCache: Array<Any>?
   
@@ -53,10 +53,10 @@ class MagneticController: NSObject {
     var canRequestMoreData = false
     ///请求错误磁片数据
     func requestErrorMagneticData() {
-        let errorCode: MagneticErrorCode = MagneticErrorCode(rawValue: (magneticContext?.error?.code)!)!
+        let errorCode: MagneticErrorCode = MagneticErrorCode(rawValue: (magneticContext.error?.code)!)!
         if errorCode == .MagneticErrorCodeNetwork || errorCode == .MagneticErrorCodeFailed {
             //显示加载状态
-            magneticContext?.state = .MagneticStateLoading;
+            magneticContext.state = .MagneticStateLoading;
 //            magneticsController refreshMagneticWithType
             
             //重新请求数据
@@ -73,19 +73,19 @@ extension MagneticController: MagneticsControllerProtocol{
     
     /*-------------------Magnetic Content---------------------*/
     ///内容行数
-    func magneticsController(magneticsController: MagneticsController, rowCountForMagneticContentInTableView tableView: MagneticTableView!) -> Int{0}
+    func magneticsController(magneticsController aMagneticsController: MagneticsController, rowCountForMagneticContentInTableView tableView: MagneticTableView!) -> Int{0}
     ///内容行高
-    func magneticsController(magneticsController: MagneticsController, rowHeightForMagneticContentAtIndex index: Int) -> Float{0.0}
+    func magneticsController(magneticsController aMagneticsController: MagneticsController, rowHeightForMagneticContentAtIndex index: Int) -> Float{0.0}
     ///复用内容视图
-    func magneticsController(magneticsController: MagneticsController, reuseCell cell: UITableViewCell, forMagneticContentAtIndex index: Int){
+    func magneticsController(magneticsController aMagneticsController: MagneticsController, reuseCell cell: UITableViewCell, forMagneticContentAtIndex index: Int){
     }
     
     /*-------------------Magnetic Spacing---------------------*/
     ///磁片底部间距
-    func magneticsController(magneticsController: MagneticsController, heightForMagneticSpacingInTableView tableView: MagneticTableView) -> Float {0.0}
+    func magneticsController(magneticsController aMagneticsController: MagneticsController, heightForMagneticSpacingInTableView tableView: MagneticTableView) -> Float {0.0}
     
     /*-------------------Magnetic Error---------------------*/
     ///是否显示磁片错误提示
-    func magneticsController(magneticsController: MagneticsController, shouldShowMagneticErrorWithCode errorCode: MagneticErrorCode) -> Bool {false}
+    func magneticsController(magneticsController aMagneticsController: MagneticsController, shouldShowMagneticErrorWithCode errorCode: MagneticErrorCode) -> Bool {false}
     
 }
