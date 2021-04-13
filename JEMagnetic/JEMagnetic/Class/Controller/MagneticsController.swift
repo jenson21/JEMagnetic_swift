@@ -340,19 +340,17 @@ extension MagneticsController {
         let url: String = aMagneticController.magneticRequestURLInMagneticsController(magneticsController: self)
         let param: NSDictionary = aMagneticController.magneticRequestParametersInMagneticsController(magneticsController: self)
         
-        
         if url.count == 0 {
             return;
         }
 
-        // to do
-//        [JEHttpManager requestType:type requestUrl:url parameters:param success:^(id  _Nonnull responseObject) {
-//            magneticController.magneticContext.magneticInfo = responseObject;
-//            [weakSelf magneticSeparateDataBeReady:magneticController.magneticContext];
-//        } failure:^(id  _Nonnull error) {
-//            NSError *magneticError = [NSError errorWithDomain:@"MagneticError" code:MagneticErrorCodeNetwork userInfo:nil];
-//            [weakSelf magneticSeparateDataUnavailable:magneticController.magneticContext error:magneticError];
-//        }];
+        JEHttpManager.requestType(requestType: type.rawValue, requestUrl: url, parameters: param, success: { (responseObject) in
+            aMagneticController.magneticContext.magneticInfo = responseObject as! [String : String]
+            magneticSeparateDataBeReady(magneticContext: aMagneticController.magneticContext)
+        }, failure: { (error) in
+            let magneticError = NSError.init(domain: "MagneticError", code: MagneticErrorCode.MagneticErrorCodeNetwork.rawValue, userInfo: nil)
+            magneticSeparateDataUnavailable(magneticContext: aMagneticController.magneticContext, error: magneticError)
+        })
     }
     
     //单磁片请求成功回调

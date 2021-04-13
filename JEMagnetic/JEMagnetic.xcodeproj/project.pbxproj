@@ -15,6 +15,7 @@
 		D1225F8F2620B5DF00197795 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D1225F8D2620B5DF00197795 /* LaunchScreen.storyboard */; };
 		D1225F9A2620B5DF00197795 /* JEMagneticTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1225F992620B5DF00197795 /* JEMagneticTests.swift */; };
 		D1225FA52620B5DF00197795 /* JEMagneticUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1225FA42620B5DF00197795 /* JEMagneticUITests.swift */; };
+		D157F1A52625FC57002BC8C9 /* JEHttpManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D157F1A42625FC57002BC8C9 /* JEHttpManager.swift */; };
 		D1BB30122621CB7E008E61F5 /* MagneticContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1BB30112621CB7E008E61F5 /* MagneticContext.swift */; };
 		D1BB30142621CBB7008E61F5 /* MagneticTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1BB30132621CBB7008E61F5 /* MagneticTableView.swift */; };
 		D1BB30162621ED96008E61F5 /* MagneticsControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1BB30152621ED96008E61F5 /* MagneticsControllerProtocol.swift */; };
@@ -59,6 +60,7 @@
 		D1225FA02620B5DF00197795 /* JEMagneticUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JEMagneticUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1225FA42620B5DF00197795 /* JEMagneticUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JEMagneticUITests.swift; sourceTree = "<group>"; };
 		D1225FA62620B5DF00197795 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D157F1A42625FC57002BC8C9 /* JEHttpManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JEHttpManager.swift; sourceTree = "<group>"; };
 		D1BB30112621CB7E008E61F5 /* MagneticContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagneticContext.swift; sourceTree = "<group>"; };
 		D1BB30132621CBB7008E61F5 /* MagneticTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagneticTableView.swift; sourceTree = "<group>"; };
 		D1BB30152621ED96008E61F5 /* MagneticsControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagneticsControllerProtocol.swift; sourceTree = "<group>"; };
@@ -190,6 +192,7 @@
 		D1BB30102621CB53008E61F5 /* Request */ = {
 			isa = PBXGroup;
 			children = (
+				D157F1A42625FC57002BC8C9 /* JEHttpManager.swift */,
 			);
 			path = Request;
 			sourceTree = "<group>";
@@ -343,6 +346,7 @@
 				D1BB301C2621EDF4008E61F5 /* MagneticController.swift in Sources */,
 				D1BB301E2621EE0B008E61F5 /* MagneticCollectionController.swift in Sources */,
 				D1BB30202621EFFC008E61F5 /* NSObject+Extension.swift in Sources */,
+				D157F1A52625FC57002BC8C9 /* JEHttpManager.swift in Sources */,
 				D1BB30182621EDB9008E61F5 /* MagneticControllerProtocol.swift in Sources */,
 				D1BB30252621F863008E61F5 /* JEBaseLoadingView.swift in Sources */,
 				D1BB301A2621EDD7008E61F5 /* MagneticsController.swift in Sources */,
