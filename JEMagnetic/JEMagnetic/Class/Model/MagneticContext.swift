@@ -74,8 +74,8 @@ class MagneticContext: NSObject {
     ///磁片信息（CMS配置的原始数据）
     var magneticInfo = [String: String]()
     ///数据源,可为model
-    private var _json: AnyObject?
-    var json: AnyObject? {
+    private var _json: Any?
+    var json: Any? {
         get{_json!}
         set(newJson){
             _json = newJson

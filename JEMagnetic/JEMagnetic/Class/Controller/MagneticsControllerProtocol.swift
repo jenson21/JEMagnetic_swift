@@ -25,7 +25,7 @@ protocol MagneticsControllerProtocol: AnyObject {
     ///内容行数
     func magneticsController(magneticsController aMagneticsController: MagneticsController, rowCountForMagneticContentInTableView tableView: MagneticTableView!) -> Int
     ///内容行高
-    func magneticsController(magneticsController aMagneticsController: MagneticsController, rowHeightForMagneticContentAtIndex index: Int) -> Float
+    func magneticsController(magneticsController aMagneticsController: MagneticsController, rowHeightForMagneticContentAtIndex index: Int) -> CGFloat
     ///复用内容视图
     func magneticsController(magneticsController aMagneticsController: MagneticsController, reuseCell cell: UITableViewCell, forMagneticContentAtIndex index: Int)
 
@@ -34,7 +34,7 @@ protocol MagneticsControllerProtocol: AnyObject {
     //MARK: 磁片内容
 
     ///内容视图Class。默认为UITableViewCell。
-    func magneticsController(magneticsController aMagneticsController: MagneticsController, cellClassForMagneticContentAtIndex index: Int) -> AnyClass
+    func magneticsController(magneticsController aMagneticsController: MagneticsController, cellClassForMagneticContentAtIndex index: Int) -> UITableViewCell
     ///内容视图复用标识符。默认为"CellClass_MagneticType"的形式。
     func magneticsController(magneticsController aMagneticsController: MagneticsController, cellIdentifierForMagneticContentAtIndex index: Int) -> String
     ///点击内容事件
@@ -53,7 +53,7 @@ protocol MagneticsControllerProtocol: AnyObject {
     //MARK: 顶部悬浮视图
     
     ///悬浮视图高度。默认为0.0。
-    func magneticsController(magneticsController aMagneticsController: MagneticsController, heightForSuspendHeaderInTableView tableView: MagneticTableView) -> Float
+    func magneticsController(magneticsController aMagneticsController: MagneticsController, heightForSuspendHeaderInTableView tableView: MagneticTableView) -> CGFloat
     ///悬浮视图。默认为nil。
     func magneticsController(magneticsController aMagneticsController: MagneticsController, viewForSuspendHeaderInTableView tableView: MagneticTableView) -> UIView
     
@@ -64,9 +64,9 @@ protocol MagneticsControllerProtocol: AnyObject {
     ///是否显示头部视图。默认为false。
     func magneticsController(magneticsController aMagneticsController: MagneticsController, shouldShowMagneticHeaderInTableView tableView: MagneticTableView) -> Bool
     ///头部行高
-    func magneticsController(magneticsController aMagneticsController: MagneticsController, heightForMagneticHeaderInTableView tableView: MagneticTableView) -> Float
+    func magneticsController(magneticsController aMagneticsController: MagneticsController, heightForMagneticHeaderInTableView tableView: MagneticTableView) -> CGFloat
     ///头部视图Class。默认为UITableViewCell。
-    func magneticsController(magneticsController aMagneticsController: MagneticsController, cellClassForMagneticHeaderInTableView tableView: MagneticTableView) -> AnyClass
+    func magneticsController(magneticsController aMagneticsController: MagneticsController, cellClassForMagneticHeaderInTableView tableView: MagneticTableView) -> UITableViewCell
     ///头部视图复用标识符。默认为"CellClass_MagneticType"的形式。
     func magneticsController(magneticsController aMagneticsController: MagneticsController, cellIdentifierForMagneticHeaderInTableView tableView: MagneticTableView) -> String
     ///复用头部视图
@@ -81,9 +81,9 @@ protocol MagneticsControllerProtocol: AnyObject {
     ///是否显示尾部视图。默认为NO。
     func magneticsController(magneticsController aMagneticsController: MagneticsController, shouldShowMagneticFooterInTableView tableView: MagneticTableView) -> Bool
     ///尾部行高
-    func magneticsController(magneticsController aMagneticsController: MagneticsController, heightForMagneticFooterInTableView tableView: MagneticTableView) -> Float
+    func magneticsController(magneticsController aMagneticsController: MagneticsController, heightForMagneticFooterInTableView tableView: MagneticTableView) -> CGFloat
     ///尾部视图Class。默认为UITableViewCell。
-    func magneticsController(magneticsController aMagneticsController: MagneticsController, cellClassForMagneticFooterInTableView tableView: MagneticTableView) -> AnyClass
+    func magneticsController(magneticsController aMagneticsController: MagneticsController, cellClassForMagneticFooterInTableView tableView: MagneticTableView) -> UITableViewCell
     ///尾部视图复用标识符。默认为"CellClass_MagneticType"的形式。
     func magneticsController(magneticsController aMagneticsController: MagneticsController, cellIdentifierForMagneticFooterInTableView tableView: MagneticTableView) -> String
     ///复用尾部视图
@@ -96,7 +96,7 @@ protocol MagneticsControllerProtocol: AnyObject {
     //MARK: 磁片底部间距
     
     ///磁片间距大小。默认为0.0，当高度为0.0时无间距（不占用cell）。
-    func magneticsController(magneticsController aMagneticsController: MagneticsController, heightForMagneticSpacingInTableView tableView: MagneticTableView) -> Float
+    func magneticsController(magneticsController aMagneticsController: MagneticsController, heightForMagneticSpacingInTableView tableView: MagneticTableView) -> CGFloat
     ///磁片间距颜色。默认为透明。
     func magneticsController(magneticsController aMagneticsController: MagneticsController, colorForMagneticSpacingInTableView tableView: MagneticTableView) -> UIColor
     ///复用磁片底部间距视图
@@ -184,7 +184,7 @@ extension MagneticsControllerProtocol{
     /*-------------------Magnetic Content---------------------*/
     //MARK: 磁片内容
 
-    func magneticsController(magneticsController aMagneticsController: MagneticsController, cellClassForMagneticContentAtIndex index: Int) -> AnyClass{(Any).self as! AnyClass}
+    func magneticsController(magneticsController aMagneticsController: MagneticsController, cellClassForMagneticContentAtIndex index: Int) -> UITableViewCell{UITableViewCell()}
     func magneticsController(magneticsController aMagneticsController: MagneticsController, cellIdentifierForMagneticContentAtIndex index: Int) -> String{""}
     func magneticsController(magneticsController aMagneticsController: MagneticsController, didSelectMagneticContentAtIndex index: Int){}
     func magneticsController(magneticsController aMagneticsController: MagneticsController, willDisplayCell cell: UITableViewCell, forMagneticContentAtIndex index: Int){}
@@ -196,7 +196,7 @@ extension MagneticsControllerProtocol{
     /*-------------------Suspend Header---------------------*/
     //MARK: 顶部悬浮视图
     
-    func magneticsController(magneticsController aMagneticsController: MagneticsController, heightForSuspendHeaderInTableView tableView: MagneticTableView) -> Float{0.0}
+    func magneticsController(magneticsController aMagneticsController: MagneticsController, heightForSuspendHeaderInTableView tableView: MagneticTableView) -> CGFloat{0.0}
     func magneticsController(magneticsController aMagneticsController: MagneticsController, viewForSuspendHeaderInTableView tableView: MagneticTableView) -> UIView{return UIView()}
     
     
@@ -204,8 +204,8 @@ extension MagneticsControllerProtocol{
     //MARK: 磁片头部
     
     func magneticsController(magneticsController aMagneticsController: MagneticsController, shouldShowMagneticHeaderInTableView tableView: MagneticTableView) -> Bool{false}
-    func magneticsController(magneticsController aMagneticsController: MagneticsController, heightForMagneticHeaderInTableView tableView: MagneticTableView) -> Float{0.0}
-    func magneticsController(magneticsController aMagneticsController: MagneticsController, cellClassForMagneticHeaderInTableView tableView: MagneticTableView) -> AnyClass{(Any).self as! AnyClass}
+    func magneticsController(magneticsController aMagneticsController: MagneticsController, heightForMagneticHeaderInTableView tableView: MagneticTableView) -> CGFloat{0.0}
+    func magneticsController(magneticsController aMagneticsController: MagneticsController, cellClassForMagneticHeaderInTableView tableView: MagneticTableView) -> UITableViewCell{UITableViewCell()}
     func magneticsController(magneticsController aMagneticsController: MagneticsController, cellIdentifierForMagneticHeaderInTableView tableView: MagneticTableView) -> String{""}
     func magneticsController(magneticsController aMagneticsController: MagneticsController, reuseCell cell: UITableViewCell, cellIdentifierForMagneticHeaderInTableView tableView: MagneticTableView){}
     func magneticsController(magneticsController aMagneticsController: MagneticsController, didSelectMagneticHeaderInTableView tableView: MagneticTableView){}
@@ -215,8 +215,8 @@ extension MagneticsControllerProtocol{
     //MARK: 磁片尾部
     
     func magneticsController(magneticsController aMagneticsController: MagneticsController, shouldShowMagneticFooterInTableView tableView: MagneticTableView) -> Bool{false}
-    func magneticsController(magneticsController aMagneticsController: MagneticsController, heightForMagneticFooterInTableView tableView: MagneticTableView) -> Float{0.0}
-    func magneticsController(magneticsController aMagneticsController: MagneticsController, cellClassForMagneticFooterInTableView tableView: MagneticTableView) -> AnyClass{(Any).self as! AnyClass}
+    func magneticsController(magneticsController aMagneticsController: MagneticsController, heightForMagneticFooterInTableView tableView: MagneticTableView) -> CGFloat{0.0}
+    func magneticsController(magneticsController aMagneticsController: MagneticsController, cellClassForMagneticFooterInTableView tableView: MagneticTableView) -> UITableViewCell{UITableViewCell()}
     func magneticsController(magneticsController aMagneticsController: MagneticsController, cellIdentifierForMagneticFooterInTableView tableView: MagneticTableView) -> String{""}
     func magneticsController(magneticsController aMagneticsController: MagneticsController, reuseCell cell: UITableViewCell, forMagneticFooterInTableView tableView: MagneticTableView){}
     func magneticsController(magneticsController aMagneticsController: MagneticsController, didSelectMagneticFooterInTableView tableView: MagneticTableView){}
@@ -225,7 +225,7 @@ extension MagneticsControllerProtocol{
     /*-------------------Magnetic Spacing---------------------*/
     //MARK: 磁片底部间距
     
-    func magneticsController(magneticsController aMagneticsController: MagneticsController, heightForMagneticSpacingInTableView tableView: MagneticTableView) -> Float{0.0}
+    func magneticsController(magneticsController aMagneticsController: MagneticsController, heightForMagneticSpacingInTableView tableView: MagneticTableView) -> CGFloat{0.0}
     func magneticsController(magneticsController aMagneticsController: MagneticsController, colorForMagneticSpacingInTableView tableView: MagneticTableView) -> UIColor{UIColor()}
     func magneticsController(magneticsController aMagneticsController: MagneticsController, reuseCell cell: UITableViewCell, forMagneticSpaingInTableView tableView: MagneticTableView){}
     func magneticsController(magneticsController aMagneticsController: MagneticsController, colorForMagneticBackgroundInTableView tableView: MagneticTableView) -> UIColor{UIColor()}

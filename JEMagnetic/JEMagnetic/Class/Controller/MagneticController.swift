@@ -45,7 +45,7 @@ class MagneticController: NSObject {
     ///扩展行数起始index
     var extensionRowIndex       = 0
     ///行高缓存
-    var rowHeightsCache: Array<Any>?
+    var rowHeightsCache: Array<Any> = Array()
   
     /*-------------------RequestMore---------------------*/
     //MARK: 加载更多
@@ -75,14 +75,14 @@ extension MagneticController: MagneticsControllerProtocol{
     ///内容行数
     func magneticsController(magneticsController aMagneticsController: MagneticsController, rowCountForMagneticContentInTableView tableView: MagneticTableView!) -> Int{0}
     ///内容行高
-    func magneticsController(magneticsController aMagneticsController: MagneticsController, rowHeightForMagneticContentAtIndex index: Int) -> Float{0.0}
+    func magneticsController(magneticsController aMagneticsController: MagneticsController, rowHeightForMagneticContentAtIndex index: Int) -> CGFloat{0.0}
     ///复用内容视图
     func magneticsController(magneticsController aMagneticsController: MagneticsController, reuseCell cell: UITableViewCell, forMagneticContentAtIndex index: Int){
     }
     
     /*-------------------Magnetic Spacing---------------------*/
     ///磁片底部间距
-    func magneticsController(magneticsController aMagneticsController: MagneticsController, heightForMagneticSpacingInTableView tableView: MagneticTableView) -> Float {0.0}
+    func magneticsController(magneticsController aMagneticsController: MagneticsController, heightForMagneticSpacingInTableView tableView: MagneticTableView) -> CGFloat {0.0}
     
     /*-------------------Magnetic Error---------------------*/
     ///是否显示磁片错误提示

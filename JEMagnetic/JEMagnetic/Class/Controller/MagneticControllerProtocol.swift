@@ -15,7 +15,7 @@ protocol MagneticControllerProtocol: AnyObject {
     ///刷新指定类型的磁片
     func refreshMagneticWithType(_ type: MagneticType)
     ///刷新指定类型磁片的数据源
-    func refreshMagneticWithType(_ type: MagneticType, json ajson: Any)
+    func refreshMagneticWithType(_ type: MagneticType, json ajson: Any?)
     /// 添加指定Section磁片
     /// - Parameters:
     ///   - magneticType: 磁片类型

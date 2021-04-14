@@ -26,6 +26,7 @@
 		D1BB30202621EFFC008E61F5 /* NSObject+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1BB301F2621EFFC008E61F5 /* NSObject+Extension.swift */; };
 		D1BB30222621F016008E61F5 /* JEHttpManager+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1BB30212621F016008E61F5 /* JEHttpManager+Extension.swift */; };
 		D1BB30252621F863008E61F5 /* JEBaseLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1BB30242621F863008E61F5 /* JEBaseLoadingView.swift */; };
+		D1E659F926274792007B2BB4 /* MagneticErrorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1E659F826274792007B2BB4 /* MagneticErrorCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 		D1BB301F2621EFFC008E61F5 /* NSObject+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject+Extension.swift"; sourceTree = "<group>"; };
 		D1BB30212621F016008E61F5 /* JEHttpManager+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JEHttpManager+Extension.swift"; sourceTree = "<group>"; };
 		D1BB30242621F863008E61F5 /* JEBaseLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JEBaseLoadingView.swift; sourceTree = "<group>"; };
+		D1E659F826274792007B2BB4 /* MagneticErrorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagneticErrorCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -185,6 +187,7 @@
 			children = (
 				D1BB30132621CBB7008E61F5 /* MagneticTableView.swift */,
 				D1BB30242621F863008E61F5 /* JEBaseLoadingView.swift */,
+				D1E659F826274792007B2BB4 /* MagneticErrorCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -350,6 +353,7 @@
 				D1BB30182621EDB9008E61F5 /* MagneticControllerProtocol.swift in Sources */,
 				D1BB30252621F863008E61F5 /* JEBaseLoadingView.swift in Sources */,
 				D1BB301A2621EDD7008E61F5 /* MagneticsController.swift in Sources */,
+				D1E659F926274792007B2BB4 /* MagneticErrorCell.swift in Sources */,
 				D1BB30142621CBB7008E61F5 /* MagneticTableView.swift in Sources */,
 				D1BB30162621ED96008E61F5 /* MagneticsControllerProtocol.swift in Sources */,
 				D1225F832620B5D900197795 /* AppDelegate.swift in Sources */,
