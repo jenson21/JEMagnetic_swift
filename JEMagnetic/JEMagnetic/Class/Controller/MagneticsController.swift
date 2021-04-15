@@ -255,25 +255,36 @@ extension MagneticsController{
         aIndex < magneticControllersArray.count ? magneticControllersArray[aIndex] : nil
     }
     //是否为磁片间距
-    private func isMagneticSpacing(magneticController aMagneticController: MagneticController, atIndexPath indexPath: NSIndexPath) -> Bool {
-        aMagneticController.showMagneticSpacing && indexPath.row == (aMagneticController.rowCountCache - 1)
+    private func isMagneticSpacing(magneticController aMagneticController: MagneticController?, atIndexPath indexPath: NSIndexPath) -> Bool {
+        guard aMagneticController == nil else {
+            return aMagneticController!.showMagneticSpacing && indexPath.row == (aMagneticController!.rowCountCache - 1)
+        }
+        return false
     }
     //是否为磁片头部
-    private func isMagneticHeader(magneticController aMagneticController: MagneticController, atIndexPath indexPath: NSIndexPath) -> Bool {
-        aMagneticController.showMagneticHeader && indexPath.row == 0
+    private func isMagneticHeader(magneticController aMagneticController: MagneticController?, atIndexPath indexPath: NSIndexPath) -> Bool {
+        guard aMagneticController == nil else {
+            return aMagneticController!.showMagneticHeader && indexPath.row == 0
+        }
+        return false
+        
     }
     //是否为磁片尾部
-    private func isMagneticFooter(magneticController aMagneticController: MagneticController, atIndexPath indexPath: NSIndexPath) -> Bool {
-        var isMagneticFooter = false
-        if aMagneticController.showMagneticFooter {
-            if aMagneticController.showMagneticSpacing && indexPath.row == aMagneticController.rowCountCache - 2 {
-                isMagneticFooter = true
+    private func isMagneticFooter(magneticController aMagneticController: MagneticController?, atIndexPath indexPath: NSIndexPath) -> Bool {
+        
+        guard aMagneticController == nil else {
+            var isMagneticFooter = false
+            if aMagneticController!.showMagneticFooter {
+                if aMagneticController!.showMagneticSpacing && indexPath.row == aMagneticController!.rowCountCache - 2 {
+                    isMagneticFooter = true
+                }
+                if !aMagneticController!.showMagneticSpacing && indexPath.row == aMagneticController!.rowCountCache - 1 {
+                    isMagneticFooter = true
+                }
             }
-            if !aMagneticController.showMagneticSpacing && indexPath.row == aMagneticController.rowCountCache - 1 {
-                isMagneticFooter = true
-            }
+            return isMagneticFooter
         }
-        return isMagneticFooter
+        return false
     }
     //是否为有效磁片内容
     private func isValidMagneticContent(magneticController aMagneticController: MagneticController?, atIndexPath indexPath: NSIndexPath) -> Bool {
@@ -564,14 +575,66 @@ extension MagneticsController {
 
 //MARK: Bottom
 extension MagneticsController{
+    
+    ///设置封底开关
+    func setEnableTableBottomView(_ aEnableTableBottomView: Bool) {
+        if enableTableBottomView != aEnableTableBottomView {
+            enableTableBottomView = aEnableTableBottomView
+            if self.isViewLoaded {
+                refreshTableBottomView()
+            }
+        }
+    }
+    
+    ///设置封底自定义视图
+    func setTableBottomCustomView(_ aTableBottomCustomView: UIView) {
+        if tableBottomCustomView != aTableBottomCustomView {
+            tableBottomCustomView = aTableBottomCustomView
+            if self.isViewLoaded {
+                refreshTableBottomView()
+            }
+        }
+    }
+    
+    ///刷新封底视图
+    private func refreshTableBottomView(){
+        //禁用封底
+        guard !enableTableBottomView || magneticControllersArray.count == 0  else {
+            
+            if refreshType == .MagneticsRefreshTypeInfiniteScrolling { //显示加载更多控件，移除封底
+                tableView.tableFooterView = nil
+            } else {//显示封底
+                if tableBottomCustomView != nil {
+                    //自定义封底
+                    tableView.tableFooterView = tableBottomCustomView
+                } else {
+                    //默认封底
+                    if !tableView.tableFooterView!.isKind(of: MagneticTableFooterView.classForCoder()) {
+                        tableView.tableFooterView = MagneticTableFooterView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: 50))
+                    }
+                }
+                tableView.tableFooterView?.tag = kTagTableBottomView
+            }
+            return
+        }
+        
+        //无数据源
+        if tableView.tableFooterView?.tag == kTagTableBottomView {
+            tableView.tableFooterView = nil;
+        }
+    }
+    
     ///触发加载更多事件，启动加载动画
     func triggerInfiniteScrollingAction() {}
     ///完成加载更多事件，停止加载动画
     func finishInfiniteScrollingAction() {}
     ///完成所有数据加载，显示没有更多了封底图
-    func didFinishLoadAllData() {}
-    ///刷新封底视图
-    private func refreshTableBottomView(){}
+    func didFinishLoadAllData() {
+        enableTableBottomView = true
+        var aRefreshType: MagneticsRefreshType? = [.MagneticsRefreshTypePullToRefresh, .MagneticsRefreshTypeLoadingView]
+        aRefreshType?.formIntersection(refreshType!)
+        refreshType = aRefreshType
+    }
 }
 
 //MARK: MagneticControllerProtocol
@@ -705,8 +768,8 @@ extension MagneticsController: UITableViewDataSource, UITableViewDelegate{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let magneticVC: MagneticController = magneticControllerAtIndex(index: indexPath.section)!//布局参数
-        var isShowSpacing = isMagneticSpacing(magneticController: magneticVC, atIndexPath: indexPath as NSIndexPath)//磁片间距
+        let magneticVC = magneticControllerAtIndex(index: indexPath.section)!//布局参数
+        let isShowSpacing = isMagneticSpacing(magneticController: magneticVC, atIndexPath: indexPath as NSIndexPath)//磁片间距
         let isShowHeader = isMagneticHeader(magneticController: magneticVC, atIndexPath: indexPath as NSIndexPath) //头部视图
         let isShowFooter = isMagneticFooter(magneticController: magneticVC, atIndexPath: indexPath as NSIndexPath)//尾部视图
         
@@ -790,6 +853,67 @@ extension MagneticsController: UITableViewDataSource, UITableViewDelegate{
             }
         }
         return cell!
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let magneticVC = magneticControllerAtIndex(index: indexPath.section)
+        if magneticVC == nil {
+            return
+        }
+        //布局参数
+        let isShowSpacing = isMagneticSpacing(magneticController: magneticVC, atIndexPath: indexPath as NSIndexPath)//磁片间距
+        let isShowHeader = isMagneticHeader(magneticController: magneticVC, atIndexPath: indexPath as NSIndexPath) //头部视图
+        let isShowFooter = isMagneticFooter(magneticController: magneticVC, atIndexPath: indexPath as NSIndexPath)//尾部视图
+        
+        //磁片回调
+        if !isShowSpacing && !isShowHeader && !isShowFooter && !magneticVC!.showMagneticError { //数据源
+            
+            //数据源对应的index
+            var rowIndex: Int
+            if indexPath.row < magneticVC!.extensionRowIndex { //磁片内容
+                rowIndex = magneticVC!.showMagneticHeader ? indexPath.row - 1 : indexPath.row
+            } else { //磁片扩展
+                rowIndex = indexPath.row - magneticVC!.extensionRowIndex
+            }
+            magneticVC?.magneticsController(magneticsController: self, willDisplayCell: cell, forMagneticContentAtIndex: rowIndex)
+            
+        } else if isShowHeader {
+            magneticVC!.magneticsController(magneticsController: self, willDisplayingHeaderCell: cell)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let magneticVC = magneticControllerAtIndex(index: indexPath.section)
+        if magneticVC == nil {
+            return
+        }
+        //布局参数
+        let isShowSpacing = isMagneticSpacing(magneticController: magneticVC, atIndexPath: indexPath as NSIndexPath)//磁片间距
+        let isShowHeader = isMagneticHeader(magneticController: magneticVC, atIndexPath: indexPath as NSIndexPath) //头部视图
+        let isShowFooter = isMagneticFooter(magneticController: magneticVC, atIndexPath: indexPath as NSIndexPath)//尾部视图
+        
+        //点击事件
+        if isShowSpacing { //磁片间距
+            //无效点击
+        } else if isShowHeader { //头部视图
+            magneticVC!.magneticsController(magneticsController: self, didSelectMagneticHeaderInTableView: tableView as! MagneticTableView)
+        } else if isShowFooter { //尾部视图
+            magneticVC!.magneticsController(magneticsController: self, didSelectMagneticFooterInTableView: tableView as! MagneticTableView)
+        } else { //数据源
+            
+            guard magneticVC!.showMagneticError else {
+                //数据源对应的index
+                var rowIndex: Int
+                if indexPath.row < magneticVC!.extensionRowIndex { //磁片内容
+                    rowIndex = magneticVC!.showMagneticHeader ? indexPath.row - 1 : indexPath.row
+                } else { //磁片扩展
+                    rowIndex = indexPath.row - magneticVC!.extensionRowIndex
+                }
+                magneticVC?.magneticsController(magneticsController: self, didSelectMagneticContentAtIndex: rowIndex)
+                return
+            }
+        }
     }
 }
 
