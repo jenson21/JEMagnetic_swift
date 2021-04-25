@@ -11,14 +11,6 @@ import Foundation
 class JEHttpManager: NSObject {
     
     /// 请求
-    /// @param requestType 请求类型
-    /// @param url 全路径
-    /// @param parameters 请求参数
-    /// @param success 成功回调
-    /// @param failure 失败回调
-    
-    
-    /// 请求
     /// - Parameters:
     ///   - aRequestType: 请求类型
     ///   - aRequestUrl: url 全路径

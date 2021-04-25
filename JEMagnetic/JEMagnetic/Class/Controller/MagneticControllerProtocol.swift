@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol MagneticControllerProtocol: AnyObject {
+protocol MagneticControllerProtocol: NSObject {
     
     ///刷新指定类型的磁片
     func refreshMagneticWithType(_ type: MagneticType, animation aAnimation: UITableView.RowAnimation)
