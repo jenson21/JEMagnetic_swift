@@ -60,7 +60,7 @@ class MagneticController: NSObject {
 //            magneticsController refreshMagneticWithType
             
             //重新请求数据
-//            [self.magneticsController requestMagneticDataWithController:self];
+//            [self.magneticsController requestMagneticDataWithController:self]
         }
     }
     
@@ -69,7 +69,7 @@ class MagneticController: NSObject {
 
 
 //MARK: MagneticsControllerProtocol
-extension MagneticController: MagneticsControllerProtocol{
+extension MagneticController: MagneticsControllerProtocol{    
     
     /*-------------------Magnetic Content---------------------*/
     ///内容行数
@@ -82,10 +82,10 @@ extension MagneticController: MagneticsControllerProtocol{
     
     /*-------------------Magnetic Spacing---------------------*/
     ///磁片底部间距
-    func magneticsController(magneticsController aMagneticsController: MagneticsController, heightForMagneticSpacingInTableView tableView: MagneticTableView) -> CGFloat {0.0}
+    func magneticsController(magneticsController aMagneticsController: MagneticsController, heightForMagneticSpacingInTableView tableView: MagneticTableView) -> CGFloat? {nil}
     
     /*-------------------Magnetic Error---------------------*/
     ///是否显示磁片错误提示
-    func magneticsController(magneticsController aMagneticsController: MagneticsController, shouldShowMagneticErrorWithCode errorCode: MagneticErrorCode) -> Bool {false}
+    func magneticsController(magneticsController aMagneticsController: MagneticsController, shouldShowMagneticErrorWithCode errorCode: MagneticErrorCode) -> Bool? {nil}
     
 }

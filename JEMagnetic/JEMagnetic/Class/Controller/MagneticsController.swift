@@ -93,18 +93,18 @@ class MagneticsController: UIViewController {
         var frame = self.view.bounds
         frame.size.width = min(UIScreen.main.bounds.size.width, UIScreen.main.bounds.size.height)
         let tableView = MagneticTableView(frame: frame, style: .plain)
-        tableView.dataSource = self;
-        tableView.delegate = self;
-        tableView.autoresizingMask = .flexibleHeight;
-        tableView.magneticControllersArray = magneticControllersArray as? NSMutableArray;
-        tableView.magneticsController = self;
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.autoresizingMask = .flexibleHeight
+        tableView.magneticControllersArrayT = magneticControllersArray
+        tableView.magneticsController = self
         if #available(iOS 11, *) {
-            tableView.contentInsetAdjustmentBehavior = .never;
-            tableView.estimatedRowHeight = 0;
-            tableView.estimatedSectionHeaderHeight = 0;
-            tableView.estimatedSectionFooterHeight = 0;
+            tableView.contentInsetAdjustmentBehavior = .never
+            tableView.estimatedRowHeight = 0
+            tableView.estimatedSectionHeaderHeight = 0
+            tableView.estimatedSectionFooterHeight = 0
         } else {
-            self.automaticallyAdjustsScrollViewInsets = false;
+            self.automaticallyAdjustsScrollViewInsets = false
         }
         return tableView
     }()
@@ -178,7 +178,7 @@ extension MagneticsController{
         super.viewDidLoad()
         //下拉刷新
         if (refreshType == .MagneticsRefreshTypePullToRefresh) {
-            tableView.refreshControl = refreshControl;
+            tableView.refreshControl = refreshControl
         }
     }
     
@@ -306,26 +306,27 @@ extension MagneticsController{
         let magneticControllersMuArray = NSMutableArray()
         for magneticContext: MagneticContext in magneticsArray {
             //初始化磁片控制器
-            var classC: NSObject.Type? = NSClassFromString(magneticContext.clazz!) as? NSObject.Type
-            if classC?.isSubclass(of: MagneticController.classForCoder()) == nil {
-                classC = MagneticController.classForCoder() as? NSObject.Type
-            }
-            
-            let magneticController: MagneticController = classC!.init() as! MagneticController
-            magneticController.delegate = self
-            magneticController.magneticsController = self
-            magneticController.magneticContext = magneticContext
-            magneticControllersMuArray.add(magneticController)
-            
-            //初始化扩展控制器
-            let extensionClass: NSObject.Type? = NSClassFromString(magneticContext.extensionClazz!) as? NSObject.Type
-            if extensionClass?.isSubclass(of: MagneticController.classForCoder()) != nil {
-                let extensionController: MagneticController  = extensionClass!.init() as! MagneticController
-                extensionController.delegate = self;
-                extensionController.magneticsController = self;
-                extensionController.magneticContext = magneticContext;
-                extensionController.isExtension = true;
-                magneticController.extensionController = extensionController;
+            if let clazz = magneticContext.clazz {
+                var ClassC: AnyClass? = NSClassFromString(clazz)
+                if ClassC?.isSubclass(of: MagneticController.classForCoder()) == nil {
+                    ClassC = MagneticController.classForCoder() as? NSObject.Type
+                }
+                let magneticController: MagneticController = ClassC?.alloc() as! MagneticController
+                magneticController.delegate = self
+                magneticController.magneticsController = self
+                magneticController.magneticContext = magneticContext
+                magneticControllersMuArray.add(magneticController)
+                
+                //初始化扩展控制器
+                let extensionClass: NSObject.Type? = NSClassFromString(magneticContext.extensionClazz!) as? NSObject.Type
+                if extensionClass?.isSubclass(of: MagneticController.classForCoder()) != nil {
+                    let extensionController: MagneticController  = extensionClass!.init() as! MagneticController
+                    extensionController.delegate = self
+                    extensionController.magneticsController = self
+                    extensionController.magneticContext = magneticContext
+                    extensionController.isExtension = true
+                    magneticController.extensionController = extensionController
+                }
             }
         }
         return magneticControllersMuArray as! Array<MagneticController>
@@ -343,7 +344,7 @@ extension MagneticsController{
         let param: NSDictionary = aMagneticController.magneticRequestParametersInMagneticsController(magneticsController: self)
         
         if url.count == 0 {
-            return;
+            return
         }
 
         //网络请求
@@ -409,7 +410,7 @@ extension MagneticsController {
             if refreshType == .MagneticsRefreshTypePullToRefresh { //下拉刷新
                 tableView.refreshControl?.endRefreshing()
             }
-            return;
+            return
         }
 
         //清空缓存
@@ -424,8 +425,8 @@ extension MagneticsController {
         let controllersArray = parseMagneticControllersWithMagneticsArray(magneticsArray: magneticsArray)
         
         //更新数据源
-        magneticControllersArray = controllersArray;
-        magneticsArray = aMagneticsArray;
+        magneticControllersArray = controllersArray
+        magneticsArray = aMagneticsArray
 
         //执行磁片初始化监听（可能调用了UI刷新和数据请求，需在_magneticsArray和_magneticControllersArray赋值后调用）
         for magneticController: MagneticController in magneticControllersArray {
@@ -481,9 +482,9 @@ extension MagneticsController {
         if enableNetworkError {
             if error.code == MagneticErrorCode.MagneticErrorCodeFailed.rawValue { //数据错误
                 // to do
-//                [self.view showFailedError:self selector:@selector(touchErrorViewAction)];
+//                [self.view showFailedError:self selector:@selector(touchErrorViewAction)]
             } else { //网络错误
-//                [self.view showNetworkError:self selector:@selector(touchErrorViewAction)];
+//                [self.view showNetworkError:self selector:@selector(touchErrorViewAction)]
             }
         }
     }
@@ -509,7 +510,7 @@ extension MagneticsController {
     ///磁片数据请求成功
     func requestMagneticDataDidSucceedWithMagneticContext(magneticContext aMagneticContext: MagneticContext) {
         
-        aMagneticContext.error = nil;
+        aMagneticContext.error = nil
         let index = magneticsArray.firstIndex(of: aMagneticContext)
         let magneticController: MagneticController = magneticControllerAtIndex(index: index!)!
         magneticController.magneticRequestDidFinishInMagneticsController(magneticsController: self)
@@ -523,18 +524,18 @@ extension MagneticsController {
 
         if magnetic != nil {
             if error.domain == "MagneticError" {
-                aMagneticContext.error = error;
+                aMagneticContext.error = error
             } else {
                 aMagneticContext.error = NSError(domain: "MagneticError", code: MagneticErrorCode.MagneticErrorCodeNetwork.rawValue, userInfo: nil)
 
             }
             
             magnetic?.magneticRequestDidFinishInMagneticsController(magneticsController: self)
-            if (magnetic?.magneticsController(magneticsController: self, shouldIgnoreMagneticErrorWithCode: MagneticErrorCode(rawValue: aMagneticContext.error!.code)!))! {
+            if magnetic?.magneticsController(magneticsController: self, shouldIgnoreMagneticErrorWithCode: MagneticErrorCode(rawValue: aMagneticContext.error!.code)!) != nil {
                 //忽略当前类型错误
                 aMagneticContext.error = nil
             }
-            tableView.reloadSections(sections: [index!]);
+            tableView.reloadSections(sections: [index!])
         }
     }
     
@@ -620,7 +621,7 @@ extension MagneticsController{
         
         //无数据源
         if tableView.tableFooterView?.tag == kTagTableBottomView {
-            tableView.tableFooterView = nil;
+            tableView.tableFooterView = nil
         }
     }
     
@@ -649,7 +650,7 @@ extension MagneticsController: MagneticControllerProtocol{
             if magneticVC.magneticContext.type == type {
                 if magneticVC.magneticContext.asyncLoad {
                     requestMagneticDataWithController(magneticController: magneticVC)
-                    return;
+                    return
                 }
                 sections.add(i)
             }
@@ -719,7 +720,7 @@ extension MagneticsController: MagneticControllerProtocol{
             }
         }
         
-        magneticsArray.remove(at: aIndex);
+        magneticsArray.remove(at: aIndex)
         magneticControllersArray.remove(at: aIndex)
         tableView.deleteSections(sections as IndexSet, with: aAnimation)
     }
@@ -789,7 +790,7 @@ extension MagneticsController: UITableViewDataSource, UITableViewDelegate{
         } else {
             if magneticVC.showMagneticError { //错误磁片
                 magneticClass = MagneticErrorCell()
-                identifier = NSStringFromClass((magneticClass?.classForCoder)!);
+                identifier = NSStringFromClass((magneticClass?.classForCoder)!)
             } else { //数据源
                 if indexPath.row < magneticVC.extensionRowIndex { //磁片内容
                     //数据源对应的index
@@ -798,7 +799,7 @@ extension MagneticsController: UITableViewDataSource, UITableViewDelegate{
                     identifier = magneticVC.magneticsController(magneticsController: self, cellIdentifierForMagneticContentAtIndex: rowIndex)
                 } else { //磁片扩展
                     //数据源对应的index
-                    let rowIndex = indexPath.row - magneticVC.extensionRowIndex;
+                    let rowIndex = indexPath.row - magneticVC.extensionRowIndex
                     magneticClass = magneticVC.extensionController?.magneticsController(magneticsController: self, cellClassForMagneticContentAtIndex: rowIndex)
                     identifier = magneticVC.extensionController?.magneticsController(magneticsController: self, cellIdentifierForMagneticContentAtIndex: rowIndex)
                 }
@@ -818,7 +819,7 @@ extension MagneticsController: UITableViewDataSource, UITableViewDelegate{
             cell = magneticClass ?? UITableViewCell()
             cell?.clipsToBounds = true
             cell?.isExclusiveTouch = true
-            cell?.selectionStyle = .none;
+            cell?.selectionStyle = .none
             
             cell?.backgroundColor = magneticVC.magneticsController(magneticsController: self, colorForMagneticBackgroundInTableView: tableView as! MagneticTableView)
             cell?.contentView.backgroundColor = cell?.backgroundColor
@@ -827,8 +828,8 @@ extension MagneticsController: UITableViewDataSource, UITableViewDelegate{
         if (isShowSpacing) { //磁片间距
             let backgroundColor = magneticVC.magneticsController(magneticsController: self, colorForMagneticSpacingInTableView: tableView as! MagneticTableView)
 
-            cell?.backgroundColor = backgroundColor;
-            cell?.contentView.backgroundColor = backgroundColor;
+            cell?.backgroundColor = backgroundColor
+            cell?.contentView.backgroundColor = backgroundColor
             magneticVC.magneticsController(magneticsController: self, reuseCell: cell!, forMagneticSpaingInTableView: tableView as! MagneticTableView)
             
         } else if (isShowHeader) { //头部视图
@@ -838,7 +839,7 @@ extension MagneticsController: UITableViewDataSource, UITableViewDelegate{
         } else { //数据源
             if magneticVC.showMagneticError { //错误磁片
                 let magneticErrorCell: MagneticErrorCell = cell as! MagneticErrorCell
-                magneticErrorCell.magneticController = magneticVC;
+                magneticErrorCell.magneticController = magneticVC
                 magneticErrorCell.refreshMagneticErrorView()
             } else {
                 if indexPath.row < magneticVC.extensionRowIndex { //磁片内容

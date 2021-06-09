@@ -121,7 +121,6 @@ class MagneticContext: NSObject {
     
 }
 
-
 //MARK: 磁片配置⬇︎
 /// 磁片类型
 enum MagneticType: Int {
